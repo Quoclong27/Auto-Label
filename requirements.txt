@@ -1,15 +1,14 @@
-﻿
+# Minimal requirements for backend API only (no AI models)
+
 # Core Backend
 fastapi==0.112.2
-uvicorn==0.35.0
+uvicorn[standard]==0.35.0
 python-dotenv==1.1.0
 python-multipart==0.0.20
 pydantic==2.10.6
-pydantic_core==2.27.2
 
 # Database
 SQLAlchemy==2.0.43
-aiosqlite==0.21.0
 asyncpg==0.30.0
 
 # Authentication
@@ -19,15 +18,8 @@ httpx==0.28.1
 # Cloud Storage
 cloudinary==1.44.1
 
-# AI/ML (add if not already installed)
-torch>=2.0.0
-torchvision>=0.15.0
-numpy>=1.24.0
-opencv-python>=4.8.0
+# Image processing (lightweight)
 pillow>=10.0.0
 
-# Optional: For production
-gunicorn>=21.0.0  # Production WSGI server
-psycopg2-binary>=2.9.9  # PostgreSQL driver
-
-
+# Production server
+gunicorn>=21.0.0
