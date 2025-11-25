@@ -1,0 +1,42 @@
+# Exclude large model directories from Docker build
+sam2/
+yoloe/
+sam3/
+uploads/
+
+# Model weights
+*.pt
+*.pth
+*.onnx
+*.bin
+mobileclip_blt.pt
+groundingdino_swint_ogc.pth
+
+# Development files
+__pycache__/
+*.pyc
+.git/
+.gitignore
+.env
+*.db
+*.sqlite3
+
+# Node modules
+node_modules/
+client/node_modules/
+client/dist/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+logs/
+*.log
+
+# Temp files
+__temp*.py
+_tmp_*
+si/
+*.tmp
+*.bak

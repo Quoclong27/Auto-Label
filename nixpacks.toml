@@ -2,10 +2,10 @@
 nixPkgs = ['python310', 'pip']
 
 [phases.install]
-cmds = ['pip install -r requirements.txt']
+cmds = ['pip install -r requirements-minimal.txt']
 
 [phases.build]
-cmds = ['echo "Build completed"']
+cmds = ['echo "Build completed - API only (no AI models)"']
 
 [start]
 cmd = 'uvicorn server.main:app --host 0.0.0.0 --port $PORT'

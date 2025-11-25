@@ -1,0 +1,25 @@
+# Minimal requirements for backend API only (no AI models)
+
+# Core Backend
+fastapi==0.112.2
+uvicorn[standard]==0.35.0
+python-dotenv==1.1.0
+python-multipart==0.0.20
+pydantic==2.10.6
+
+# Database
+SQLAlchemy==2.0.43
+asyncpg==0.30.0
+
+# Authentication
+Authlib==1.6.5
+httpx==0.28.1
+
+# Cloud Storage
+cloudinary==1.44.1
+
+# Image processing (lightweight)
+pillow>=10.0.0
+
+# Production server
+gunicorn>=21.0.0
