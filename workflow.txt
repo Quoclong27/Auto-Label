@@ -1,0 +1,23 @@
+AutoLabelApp/
+│
+├── backend/
+│   ├── main.py           # FastAPI entry
+│   ├── models/           # YOLOE + CLIP weights
+│   ├── utils/
+│   │   ├── coco_writer.py
+│   │   ├── prompt_engine.py
+│   │   └── video_stream.py
+│   └── requirements.txt
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── hooks/
+│   │   └── utils/
+│   ├── tailwind.config.js
+│   └── package.json
+│
+└── desktop/
+    ├── electron.js  # hoặc Tauri config
+    └── package.json

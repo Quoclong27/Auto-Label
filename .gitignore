@@ -1,0 +1,77 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+auto_label/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+app.db
+
+# Environment Variables
+.env
+*.env
+!.env.example
+
+# Uploads & Local Storage
+uploads/
+*.pt
+*.pth
+mobileclip_blt.pt
+groundingdino_swint_ogc.pth
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node.js (Frontend)
+node_modules/
+client/node_modules/
+client/dist/
+client/build/
+client/.vite/
+
+# SAM2 checkpoints
+sam2/checkpoints/
+checkpoints/
+
+# YOLO weights
+yoloe/pretrain/
+yoloe/logs/
+
+# Temporary files
+*.tmp
+*.bak
+__temp*.py
+_tmp_*
+si/
+si.py
+1.py
+task.bat
+
+# Documentation (keep only essential)
+*.md.backup
