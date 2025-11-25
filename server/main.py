@@ -185,6 +185,20 @@ async def on_startup():
 # --------------------------------------------------------------------------
 # Debug & Health
 # --------------------------------------------------------------------------
+@app.get("/")
+def root():
+    """Root endpoint - API is running"""
+    return {
+        "message": "AutoLabel API is running",
+        "version": "0.1.0",
+        "ai_available": AI_AVAILABLE,
+        "endpoints": {
+            "health": "/_debug_settings",
+            "auth": "/auth/login",
+            "docs": "/docs"
+        }
+    }
+
 @app.get("/_debug_settings")
 def debug_settings():
     return {
