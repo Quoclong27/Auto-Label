@@ -63,6 +63,11 @@ checkpoints/
 yoloe/pretrain/
 yoloe/logs/
 
+# Large model directories (treat as external dependencies)
+sam2/
+yoloe/
+sam3/
+
 # Temporary files
 *.tmp
 *.bak
