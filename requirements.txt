@@ -10,6 +10,7 @@ pydantic==2.10.6
 # Database
 SQLAlchemy==2.0.43
 asyncpg==0.30.0
+aiosqlite==0.21.0
 
 # Authentication
 Authlib==1.6.5
