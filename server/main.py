@@ -93,6 +93,12 @@ if lan_ip:
     allow_origins.add(f"http://{lan_ip}:5175")
     print(f"✅ CORS: Added LAN IP origins: {lan_ip}")
 
+# Add Vercel frontend for production
+vercel_url = os.getenv("VERCEL_FRONTEND_URL")
+if vercel_url:
+    allow_origins.add(vercel_url)
+    print(f"✅ CORS: Added Vercel frontend: {vercel_url}")
+
 # Allow all IPs in dev mode for easier LAN testing
 if os.getenv("DEV_OAUTH_PERMISSIVE"):
     # Allow any origin in dev mode
