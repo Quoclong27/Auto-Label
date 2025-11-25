@@ -38,8 +38,18 @@ from .schemas import (
     ManualAnnotationSubmit,
 )
 from .auth import router as auth_router
-from . import yoloe_service as ys
-from . import sam2_service as sam2
+
+# Conditional import: AI services only if models available
+try:
+    from . import yoloe_service as ys
+    from . import sam2_service as sam2
+    AI_AVAILABLE = True
+except ImportError as e:
+    print(f"⚠️  AI models not available: {e}")
+    ys = None
+    sam2 = None
+    AI_AVAILABLE = False
+
 from .cloudinary_service import (
     upload_image_local,
     upload_coco_json,
@@ -121,6 +131,17 @@ app.add_middleware(
 
 # Attach OAuth routes
 app.include_router(auth_router, prefix="")
+
+# --------------------------------------------------------------------------
+# Helper Functions
+# --------------------------------------------------------------------------
+def check_ai_available():
+    """Raise 503 error if AI models are not available in this environment."""
+    if not AI_AVAILABLE or ys is None or sam2 is None:
+        raise HTTPException(
+            status_code=503,
+            detail="AI models not available in this environment. Please use the local version with models installed."
+        )
 
 # --------------------------------------------------------------------------
 # DB init
@@ -1229,6 +1250,7 @@ async def infer_text(
     payload: InferenceParamsText,
     session: AsyncSession = Depends(get_session),
 ):
+    check_ai_available()
     res = await session.execute(select(ImageItem).where(
         ImageItem.id == payload.image_id,
         ImageItem.project_id == payload.project_id
@@ -1253,6 +1275,7 @@ async def infer_boxes(
     payload: InferenceParamsBoxes,
     session: AsyncSession = Depends(get_session),
 ):
+    check_ai_available()
     res = await session.execute(select(ImageItem).where(
         ImageItem.id == payload.image_id,
         ImageItem.project_id == payload.project_id
@@ -1285,6 +1308,7 @@ async def infer_visual(
     payload: InferenceParamsVisual,
     session: AsyncSession = Depends(get_session),
 ):
+    check_ai_available()
     res = await session.execute(select(ImageItem).where(
         ImageItem.id == payload.image_id,
         ImageItem.project_id == payload.project_id
@@ -1386,6 +1410,7 @@ async def sam2_infer_endpoint(
     payload: Sam2InferenceParams,
     session: AsyncSession = Depends(get_session),
 ):
+    check_ai_available()
     res = await session.execute(select(ImageItem).where(
         ImageItem.id == payload.image_id,
         ImageItem.project_id == payload.project_id
@@ -1425,6 +1450,7 @@ async def sam2_batch_endpoint(
     payload: Sam2BatchParams,
     session: AsyncSession = Depends(get_session),
 ):
+    check_ai_available()
     if not payload.image_ids:
         raise HTTPException(400, "No image IDs provided")
     res = await session.execute(select(ImageItem).where(
@@ -1480,6 +1506,7 @@ async def sam2_batch_endpoint(
 
 @app.post("/sam2/video")
 async def sam2_video_endpoint(payload: Sam2VideoParams):
+    check_ai_available()
     prompt_payload = _sam2_prompt_payload(payload)
     loop = asyncio.get_running_loop()
     try:
@@ -1503,6 +1530,7 @@ async def sam2_video_endpoint(payload: Sam2VideoParams):
 
 @app.post("/sam2/evaluate")
 async def sam2_evaluate_endpoint(payload: Sam2EvalParams):
+    check_ai_available()
     metrics = sam2.evaluate_predictions(payload.predictions, payload.ground_truth)
     return metrics
 
@@ -1512,6 +1540,7 @@ async def infer_prompt_free(
     payload: InferenceParamsPromptFree,
     session: AsyncSession = Depends(get_session),
 ):
+    check_ai_available()
     res = await session.execute(select(ImageItem).where(
         ImageItem.id == payload.image_id,
         ImageItem.project_id == payload.project_id
