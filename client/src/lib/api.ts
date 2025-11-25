@@ -1,13 +1,21 @@
 // Auto-detect backend URL based on how user accesses the frontend
 function getBackendURL(): string {
-  // If accessing via LAN IP (e.g., 10.10.36.36:5173), use LAN IP for backend
+  // Priority 1: Use environment variable if set (for production/staging)
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL
+  }
+  
+  // Priority 2: Auto-detect based on hostname
   const hostname = window.location.hostname
   
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
-    // Accessing via localhost - use localhost backend
-    return import.meta.env.VITE_API_URL || 'http://localhost:8000'
+    // Local development - use localhost backend
+    return 'http://localhost:8000'
+  } else if (hostname.includes('vercel.app')) {
+    // Deployed on Vercel - use Railway production backend
+    return 'https://auto-label-production.up.railway.app'
   } else {
-    // Accessing via LAN IP - use same IP for backend
+    // LAN access - use same IP for backend (e.g., 10.10.36.36:8000)
     return `http://${hostname}:8000`
   }
 }
