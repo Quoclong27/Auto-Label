@@ -105,17 +105,22 @@ if os.getenv("DEV_OAUTH_PERMISSIVE"):
     print("⚠️  DEV MODE: CORS allows all origins")
     allow_origins.add("*")
 
-# In dev mode with wildcard, use allow_origin_regex instead
-if "*" in allow_origins:
-    allow_origins.remove("*")
+# Use regex pattern for dev mode OR if Vercel is being used
+use_regex = "*" in allow_origins or any("vercel.app" in origin for origin in allow_origins)
+
+if use_regex:
+    if "*" in allow_origins:
+        allow_origins.remove("*")
+    
+    # Build regex pattern: localhost + LAN IPs + Vercel domains
     app.add_middleware(
         CORSMiddleware,
-        allow_origin_regex=r"http://(localhost|127\.0\.0\.1|10\.10\.\d+\.\d+):517[3-5]",
+        allow_origin_regex=r"https?://(localhost|127\.0\.0\.1|10\.10\.\d+\.\d+):517[3-5]|https://.*\.vercel\.app",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    print(f"✅ CORS: Using regex pattern for all local/LAN IPs")
+    print(f"✅ CORS: Using regex pattern for local/LAN/Vercel origins")
 else:
     app.add_middleware(
         CORSMiddleware,
