@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { api, API } from '../lib/api'
+import { api, API, addAuthToUrl } from '../lib/api'
 import { getProjectTypeInfo, ProjectTypeId } from '../lib/projectTypes'
 import ImagePicker, { PickerImage, PickerDetection } from '../components/ImagePicker'
 import LabelReview, { DetectionInstance } from '../components/LabelReview'
@@ -1238,7 +1238,7 @@ useEffect(() => {
     setError(null)
     setStatus(null)
     try {
-      const response = await fetch(`${API}/projects/${id}`, {
+      const response = await fetch(addAuthToUrl(`${API}/projects/${id}`), {
         method: 'DELETE',
         credentials: 'include',
       })

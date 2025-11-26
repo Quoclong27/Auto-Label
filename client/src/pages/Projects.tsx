@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { api, API } from '../lib/api'
+import { api, API, addAuthToUrl } from '../lib/api'
 import {
   PROJECT_TYPE_OPTIONS,
   getProjectTypeInfo,
@@ -89,7 +89,7 @@ export default function Projects({ onOpen, onLogout, onShowSplash }: ProjectsPro
     setError(null)
     setFeedback(null)
     try {
-      const response = await fetch(`${API}/projects/${projectId}`, {
+      const response = await fetch(addAuthToUrl(`${API}/projects/${projectId}`), {
         method: 'PUT',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -114,7 +114,7 @@ export default function Projects({ onOpen, onLogout, onShowSplash }: ProjectsPro
     setError(null)
     setFeedback(null)
     try {
-      const response = await fetch(`${API}/projects/${projectId}`, {
+      const response = await fetch(addAuthToUrl(`${API}/projects/${projectId}`), {
         method: 'DELETE',
         credentials: 'include',
       })

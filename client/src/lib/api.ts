@@ -23,7 +23,7 @@ function getBackendURL(): string {
 export const API = getBackendURL()
 
 // Get auth email from URL or localStorage
-function getAuthEmail(): string | null {
+export function getAuthEmail(): string | null {
   // Check URL parameter first (from OAuth redirect)
   const params = new URLSearchParams(window.location.search)
   const emailFromUrl = params.get('auth_email')
@@ -35,6 +35,15 @@ function getAuthEmail(): string | null {
   
   // Fallback to localStorage
   return localStorage.getItem('auth_email')
+}
+
+// Helper to add auth_email to any URL
+export function addAuthToUrl(url: string): string {
+  const authEmail = getAuthEmail()
+  if (!authEmail) return url
+  
+  const separator = url.includes('?') ? '&' : '?'
+  return `${url}${separator}auth_email=${encodeURIComponent(authEmail)}`
 }
 
 export async function api<T>(path: string, opts: RequestInit = {}): Promise<T> {
