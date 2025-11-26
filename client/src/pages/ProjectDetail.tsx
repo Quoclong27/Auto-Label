@@ -3242,7 +3242,7 @@ function UploadSection({
 
     setIsUploading(true)
     try {
-      const response = await fetch(`${API}/images/upload`, {
+      const response = await fetch(addAuthToUrl(`${API}/images/upload`), {
         method: 'POST',
         body: form,
         credentials: 'include',
