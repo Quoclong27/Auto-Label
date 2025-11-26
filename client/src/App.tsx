@@ -42,16 +42,15 @@ export default function App(){
     
     if (authEmail) {
       console.log('📝 Auth email from OAuth callback:', authEmail)
+      // Store in localStorage BEFORE removing from URL
+      localStorage.setItem('auth_email', authEmail)
       // Remove the auth_email param from URL to clean it up
       window.history.replaceState({}, '', window.location.pathname)
     }
     
-    // Call /me with auth_email param if available (for OAuth callback, with retries)
-    // Otherwise call /me without param (for existing cookie)
-    const meUrl = authEmail ? `/me?auth_email=${encodeURIComponent(authEmail)}` : '/me'
-    
-    // Use retry for OAuth callback, normal call for cookie-based auth
-    const mePromise = authEmail ? apiWithRetry(meUrl, {}, 5) : api(meUrl)
+    // Call /me - api() will automatically add auth_email from localStorage
+    // Use retry for OAuth callback, normal call otherwise
+    const mePromise = authEmail ? apiWithRetry('/me', {}, 5) : api('/me')
     
     mePromise
       .then((data: any) => {
