@@ -22,8 +22,32 @@ function getBackendURL(): string {
 
 export const API = getBackendURL()
 
+// Get auth email from URL or localStorage
+function getAuthEmail(): string | null {
+  // Check URL parameter first (from OAuth redirect)
+  const params = new URLSearchParams(window.location.search)
+  const emailFromUrl = params.get('auth_email')
+  if (emailFromUrl) {
+    // Store in localStorage for subsequent requests
+    localStorage.setItem('auth_email', emailFromUrl)
+    return emailFromUrl
+  }
+  
+  // Fallback to localStorage
+  return localStorage.getItem('auth_email')
+}
+
 export async function api<T>(path: string, opts: RequestInit = {}): Promise<T> {
-  const res = await fetch(`${API}${path}`, {
+  const authEmail = getAuthEmail()
+  
+  // Add auth_email to URL for production cross-domain auth
+  let url = `${API}${path}`
+  if (authEmail && !path.includes('auth_email=')) {
+    const separator = path.includes('?') ? '&' : '?'
+    url = `${API}${path}${separator}auth_email=${encodeURIComponent(authEmail)}`
+  }
+  
+  const res = await fetch(url, {
     credentials: 'include',
     ...opts,
     headers: {

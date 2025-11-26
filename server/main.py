@@ -217,9 +217,21 @@ def health():
 # Helpers
 # --------------------------------------------------------------------------
 def _current_email(request: Request) -> str:
+    # Try cookie first
     email = request.cookies.get("user_email")
+    
+    # Fallback to query parameter (for production cross-domain)
     if not email:
-        print(f"❌ No user_email cookie found. Cookies: {request.cookies}")
+        email = request.query_params.get("auth_email")
+    
+    # Check Authorization header as last resort
+    if not email:
+        auth_header = request.headers.get("authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            email = auth_header.replace("Bearer ", "")
+    
+    if not email:
+        print(f"❌ No authentication found. Cookies: {request.cookies}, Query: {request.query_params}")
         raise HTTPException(401, "Not authenticated")
     return email
 
